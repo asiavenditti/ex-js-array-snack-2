@@ -125,8 +125,23 @@ console.log(authors)
 
 // # Snack 4 - Calcola l’età media
 // Creare un array (ages) che contiene le età degli autori dei libri.
+
+const ages = authors.map((author) => author.age)
+console.log(ages)
+
 // Calcola la somma delle età (agesSum) usando reduce.
+
+const ageSum = ages.reduce((acc, a) => {
+
+    return acc + a
+})
+console.log(ageSum)
+
 // Stampa in console l’età media degli autori dei libri.
+
+const ageMedia = ageSum / ages.length
+console.log(ageMedia)
+
 // # Snack 5 (Bonus) - Raccogli i libri
 // Nota: a differenza di quanto visto finora negli esempi, per accedere all'API utilizzare l'url base:
 // http://localhost:3333
@@ -139,9 +154,50 @@ console.log(authors)
 
 // Usando la l'API http://localhost:3333/books/{id} usa la combinazione di .map() e Promise.all(), per creare una funzione (getBooks) che a partire da un array di id (ids), ritorna una promise che risolve un array di libri (books).
 // Testala con l’array [2, 13, 7, 21, 19] .
+
+
+
+
+async function getBooks(ids) {
+    const fetchPromise = ids.map(id =>
+        fetch(`http://localhost:3333/books/${id}`)
+    )
+
+
+    const responses = await Promise.all(fetchPromise)
+    const jsonPromises = responses.map((response) => response.json())
+    const books = await Promise.all(jsonPromises)
+
+}
+
+
+(async () => {
+    const ids = [2, 13, 7, 21, 19];
+    const books = await getBooks(ids);
+    console.log(books);
+})();
+
 // # Snack 6 (Bonus) - Ordina i libri
 // Crea una variabile booleana (areThereAvailableBooks) per verificare se c’è almeno un libro disponibile.
+
+const areTheAvailableBooks = books.some((book) => book.available)
+console.log(areTheAvailableBooks)
+
 // Crea un array (booksByPrice) con gli elementi di books ordinati in base al prezzo (crescente).
-// Ordina l’array booksByPricein base alla disponibilità (prima quelli disponibili), senza creare un nuovo array.
+
+const booksByPrice = books.sort((a, b) => {
+
+    const priceA = parseFloat(a.price)
+    const priceB = parseFloat(b.price)
+    return (priceA - priceB)
+
+})
+
+console.log(booksByPrice)
+
+// Ordina l’array booksByPrice in base alla disponibilità (prima quelli disponibili), senza creare un nuovo array.
+
+
+
 // # Snack 7 (Bonus) - Analizza i tag
 // Usa reduce per creare un oggetto (tagCounts) che conta quante volte ogni tag viene usato tra i libri.
