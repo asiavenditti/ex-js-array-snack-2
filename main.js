@@ -167,7 +167,7 @@ async function getBooks(ids) {
     const responses = await Promise.all(fetchPromise)
     const jsonPromises = responses.map((response) => response.json())
     const books = await Promise.all(jsonPromises)
-
+    return books
 }
 
 
@@ -197,6 +197,11 @@ console.log(booksByPrice)
 
 // Ordina l’array booksByPrice in base alla disponibilità (prima quelli disponibili), senza creare un nuovo array.
 
+books.sort((a, b) => {
+    return (b.available) - (a.available)
+})
+
+console.log(books)
 
 
 // # Snack 7 (Bonus) - Analizza i tag
